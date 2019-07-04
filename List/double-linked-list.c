@@ -62,19 +62,46 @@ NODE *searchRecursive(NODE *node, int element)
   }
 }
 
+NODE *removeList(NODE *node, int element)
+{
+  NODE *aux = node;
+  while (aux != NULL && !(aux->element == element))
+  {
+    aux = aux->current;
+  }
+  if(aux == NULL)
+  {
+    return node;
+  }
+  if(aux == node)
+  {
+    node = aux->current;
+  }
+  else
+  {
+    aux->previous->current = aux->current;
+  }
+  if(aux->current != NULL)
+  {
+    aux->current->previous = aux->previous;
+  }
+  free(aux);
+  return node;
+}
+
 void printList(NODE *node)
 {
-  if(node->current != NULL)
+  if(node != NULL)
   {
     printf("%d ",node->element);
     printList(node->current);
   }
-  printf("%d\n",node->element);
+  // printf("%d\n",node->element);
 }
 
 int main()
 {
-  int n,i,elements,s;
+  int n,i,elements,s, rm ;
   NODE *new = NULL;
   printf("Enter a quantity of numbers\n");
   scanf("%d",&n);
@@ -83,18 +110,25 @@ int main()
     scanf("%d",&elements);
     new = add(new, elements);
   }
+  printList(new);
+  printf("\n");
+  // printf("Enter a number for the search\n");
+  // scanf("%d",&s );
+  // if(searchRecursive(new, s))
+  // {
+  //   printf("Number found\n");
+  // }
+  // else
+  // {
+  //   printf("Number not found\n");
+  // }
 
-  printf("Enter a number for the search\n");
-  scanf("%d",&s );
-  if(searchRecursive(new, s))
-  {
-    printf("Number found\n");
-  }
-  else
-  {
-    printf("Number not found\n");
-  }
-  // printList(new);
+  printf("Enter a number for the remove\n");
+  scanf("%d",&rm);
+  new = removeList(new, rm);
 
+  printf("The elements of the list: \n");
+  printList(new);
+  printf("\n");
   return 0;
 }
