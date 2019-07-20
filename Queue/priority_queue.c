@@ -35,9 +35,7 @@ int is_empty(PQ *pq)
 void enqueue(PQ *pq, int i, int p)
 {
  NODE *new = createNode(i,p);
-  // NODE *new = (NODE*) malloc(sizeof(NODE));
-  // new->item = i;
-  // new->priority = p;
+
   if((is_empty(pq)) || (p > pq->head->priority))
   {
     new->next = pq->head;
@@ -86,7 +84,7 @@ int maximum(PQ *pq)
 
 void printQueue(PQ *q)
 {
-  // int i;
+
   if(!is_empty(q))
   {
     printf("%d ",q->head->item);
@@ -94,7 +92,7 @@ void printQueue(PQ *q)
   }
 
 }
-
+/*
 int main()
 {
   PQ *newPq = createPq();
@@ -115,3 +113,4 @@ int main()
   printQueue(newPq);
   return 0;
 }
+*/
