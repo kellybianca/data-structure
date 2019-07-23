@@ -3,10 +3,11 @@
 
 #define MAX 20
 
-typedef struct node{
+typedef struct node
+{
     int item;
     struct node *next;
-}NODE;
+} NODE;
 
 typedef struct adj_list
 {
@@ -22,7 +23,7 @@ typedef struct graph
 
 NODE *create_node(int item)
 {
-    NODE *new = (NODE*) malloc(sizeof(NODE));
+    NODE *new = (NODE *)malloc(sizeof(NODE));
     new->item = item;
     new->next = NULL;
     return new;
@@ -78,6 +79,24 @@ void dfs(GRAPH *graph, int source)
     create_node(source);
 }
 
+void print_graph(GRAPH *graph)
+{
+
+    int i;
+    for (i = 0; i < MAX; i++)
+    {
+        printf("Vertices: %d", i);
+        ADJ_LIST *adj = graph->vertices[i];
+
+        while (adj != NULL)
+        {
+            printf(" %d =>", adj->item);
+            adj = adj->next;
+        }
+        printf("\n");
+    }
+}
+
 int main()
 {
     GRAPH *graph = create_graph();
@@ -90,7 +109,9 @@ int main()
     add_edge(graph, 3, 4);
     add_edge(graph, 4, 5);
 
-    dfs(graph, 4);
-    printf("\n");
+    print_graph(graph);
+    /// dfs(graph, 4);
+    //printf("\n");
+
     return 0;
 }
