@@ -9,85 +9,87 @@ typedef struct node
 
 typedef struct queue
 {
-    int current_size;
-    int head;
-    int tail;
-    NODE *items;
+    NODE *head;
+    NODE *tail;
+    int size;
 } QUEUE;
 
 NODE *createNode(int item)
 {
-    NODE *new = (NODE *)malloc(sizeof(NODE));
-    new->item = item;
-    new->next = NULL;
-    return new;
-}
-
-QUEUE *createQueue()
-{
-    QUEUE *new = (QUEUE *)malloc(sizeof(QUEUE));
-    new->current_size = 0;
-    new->head = 0;
-    new->tail = 0;
-    new->items = NULL;
-    return new;
-}
-
-void enqueue(QUEUE *queue, int item)
-{
-    NODE *aux = createNode(item);
-
-    if (queue->current_size == 0)
-    {
-        queue->head = item;
-        queue->tail = item;
-    }
-
-    queue->items = aux;
-    queue->tail = item;
-    queue->current_size++;
-  /*    printf("Head: %d\n", queue->head);
-    printf("Tail: %d\n", queue->tail);
-    printf("Current size: %d\n", queue->current_size);
-    printf("\n");*/
+    NODE *newNode = (NODE *)malloc(sizeof(NODE));
+    newNode->item = item;
+    newNode->next = NULL;
+    return newNode;
 }
 
 void printQueue(QUEUE *queue)
 {
-    NODE *aux = createNode(queue->items->item);
-   
+    NODE *aux = queue->head;
     while (aux != NULL)
     {
-        aux->item = queue->head;
-        printf("%d\n", aux->item);
+        printf("%d -> ", aux->item);
         aux = aux->next;
     }
 }
 
+void enqueue(QUEUE *queue, int item)
+{
+    NODE *newNode = createNode(item);
+    if (queue->size == 0)
+    {
+        queue->head = newNode;
+        queue->tail = newNode;
+        queue->size++;
+        return;
+    }
+    queue->tail->next = newNode;
+    queue->tail = newNode;
+    queue->size++;
+    return;
+}
+
 int dequeue(QUEUE *queue)
 {
-    NODE *aux;
-    printf("Remove: %d\n", queue->head);
+    if (!queue->size)
+    {
+        printf("0 elementos\n");
+        return 0;
+    }
+    if (queue->size == 1)
+    {
+        queue->size--;
+        NODE *a = queue->head;
+        queue->head = NULL;
+        queue->tail = NULL;
+        free(a);
+        return 1;
+    }
+    NODE *aux = queue->head;
+    printf("\nRemove head: %d", aux->item);
 
-    queue->head = queue->head + 1;
-    queue->current_size--;
-    return queue->head;
+    queue->head = aux->next;
+    queue->size--;
+    free(aux);
+    return 1;
 }
 
 int main()
 {
-    QUEUE *queue = createQueue();
-
-    enqueue(queue, 1);
-    enqueue(queue, 2);
-    enqueue(queue, 3);
-    enqueue(queue, 4);
+    QUEUE *queue = (QUEUE *)malloc(sizeof(QUEUE));
+    queue->head = NULL;
+    queue->tail = NULL;
+    queue->size = 0;
+    int i;
+    for (i = 0; i < 10; i++)
+    {
+        enqueue(queue, i);
+    }
     printQueue(queue);
-    /*  int k = dequeue(queue);
-    printf("\nNew head: %d\n\n", k);
-    enqueue(queue, 7);
-    enqueue(queue,9);
+
+    int k = dequeue(queue);
+    printf("\nNew head: %d\n", k);
     k = dequeue(queue);
-    printf("\nNew head: %d\n", k);*/
+    printf("\nNew head: %d\n", k);
+    printQueue(queue);
     return 0;
 }
